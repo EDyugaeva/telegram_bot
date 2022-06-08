@@ -24,15 +24,15 @@ import static java.time.LocalDateTime.*;
 @Service
 public class TelegramBotUpdatesListener implements UpdatesListener {
 
+    private final TelegramBot telegramBot;
     private final NotificationTaskRepository notificationTaskRepository;
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
-    public TelegramBotUpdatesListener(NotificationTaskRepository notificationTaskRepository) {
-        this.notificationTaskRepository = notificationTaskRepository;
-    }
 
-    @Autowired
-    private TelegramBot telegramBot;
+    public TelegramBotUpdatesListener(NotificationTaskRepository notificationTaskRepository, TelegramBot telegramBot) {
+        this.notificationTaskRepository = notificationTaskRepository;
+        this.telegramBot = telegramBot;
+    }
 
     @PostConstruct
     public void init() {
@@ -96,7 +96,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
         NotificationTask notificationTask = new NotificationTask(update.message().chat().id(), item, time);
         notificationTaskRepository.save(notificationTask);
-        sendMessage(update, "Message is saved and will be send" + date);
+        sendMessage(update, "Message is saved and will be sent" + date);
     }
 
 }
